@@ -1,7 +1,8 @@
 # ECR-POS
 ## The general scheme
 ⋅⋅⋅The integration concerns three systems: ECR, MELLON POS and BANK:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+![General Scheme](https://github.com/arbdoescode/ECR-POS/blob/main/images/GeneralScheme.PNG "General Scheme")
 
 ⋅⋅⋅The usual flow of communication follows 4 steps:
 1. The transactions starts from ECR: the operator selects “payment with card” as form
@@ -16,7 +17,7 @@ POS sends complementary information (transaction number, approval code etc)
 ## Physical Connections
 ### CONNECTION OVER TCP/IP
 ⋅⋅⋅The integration concerns three systems: ECR, MELLON POS and BANK:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![Conn Ip](https://github.com/arbdoescode/ECR-POS/blob/main/images/ConnectionTCP-IP.PNG "Connection Ip")
 
 POS acts as “server” in relation to the ECR and as “client” in relation to the bank. The LAN
 switch can be external device or embedded in the cashier machine.
@@ -26,7 +27,7 @@ Last chapter provides instructions about how to set up the connection for each P
 ⋅⋅⋅This connection is not supported in Axium devices. The connection over USB is also
 supported, without any change in the protocol. However, that solution is not widely available
 in the existing POS applications.
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![Conn Usb](https://github.com/arbdoescode/ECR-POS/blob/main/images/ConnectionUSB.PNG "Connection USB")
 
 ## Syntax of the Messages
 ### Message [ECHO]
@@ -34,6 +35,12 @@ It is sent by ECR and initiated by the operator to check the connection with the
 during the installation). Τhe terminal ID and the POS application version use also to be
 completed in the echo message:
 
+**ECR REQUEST:**
 ```
-**X/**<text>
+`X/`<text>
+```
+
+**POS RESPONSE:**
+```
+`X/`<text>`/T`<tid>:<app-version>
 ```

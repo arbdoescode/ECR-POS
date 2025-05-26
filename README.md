@@ -120,3 +120,8 @@ Example of approval
 |                  | POS->ECR: BYTES 121                                                                                                                    |        |          |           |
 |                  | MEL0101R/S000728/C00/DVisa Credit:\*\*\*\*\*\*\*\*\*\*\*\*3489:2000:1500:111:64999999:000091:133030119089:000065:787032:20211126180454 | 2000   | Approved | Yes       |
 | \[211126 180455] | ECR connection closed                                                                                                                  |        |          |           |
+
+## Testing the connection between ECR and POS
+
+POS listens for ECR requests in port 4000.
+Trivial test can be performed with echo message.

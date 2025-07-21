@@ -128,7 +128,7 @@ async def send_pos_request(ip):
     port = 4000
     msg = build_universal_ecr_message(
         ["A//S", "//F", "//D", "//R", "//H", "//T", "//G", "//M"],
-        ["000098", "5000:008:2", "20211122123652", "200111", "PUPO9999", "000032", ":0:0:0:0", "123456789123456789"]
+        ["000099", "5000:008:2", "20211122123652", "200111", "PUPO9999", "000032", ":0:0:0:0", "123456789123456789"]
     )
     await send_and_listen_to_pos(ip, port, msg)
 
@@ -136,6 +136,11 @@ async def send_pos_request(ip):
 def get_wifi_ipv4_prefix():
     for iface, snics in psutil.net_if_addrs().items():
         if "Wi-Fi" in iface or "wlan" in iface:
+            for snic in snics:
+                if snic.family == socket.AF_INET:
+                    ip_parts = snic.address.split('.')
+                    return '.'.join(ip_parts[:3]) + '.'
+        if "Ethernet" in iface or "wlan" in iface:
             for snic in snics:
                 if snic.family == socket.AF_INET:
                     ip_parts = snic.address.split('.')
@@ -154,6 +159,8 @@ async def main():
         await send_pos_request(found_ip)
     else:
         print("❌ POS not found")
+
+    
 
 
 if __name__ == "__main__":

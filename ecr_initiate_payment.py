@@ -43,7 +43,7 @@ async def test_conn_ecr_message(ip, port, msg_bytes):
 
 async def send_and_listen_to_pos(ip, port, msg_bytes):
     try:
-        reader, writer = await asyncio.wait_for(asyncio.open_connection(ip, port), timeout=160)
+        reader, writer = await asyncio.wait_for(asyncio.open_connection(ip, port), timeout=60)
         print(f"✅ Connected to {ip}:{port}")
         writer.write(msg_bytes)
         await writer.drain()
@@ -106,7 +106,7 @@ async def scan_ip_range(base_ip):
 
     tasks = []
     found = None
-
+    print(base_ip)
     async def try_ip(ip):
         nonlocal found
         if found:
@@ -128,13 +128,15 @@ async def send_pos_request(ip):
     port = 4000
     msg = build_universal_ecr_message(
         ["A//S", "//F", "//D", "//R", "//H", "//T", "//G", "//M"],
-        ["000099", "5000:008:2", "20211122123652", "200111", "PUPO9999", "000032", ":0:0:0:0", "123456789123456789"]
+        ["000100", "5000:008:2", "20211122123652", "200111", "PUPO9999", "000032", ":0:0:0:0", "123456789123456789"]
     )
     await send_and_listen_to_pos(ip, port, msg)
 
 
 def get_wifi_ipv4_prefix():
+   
     for iface, snics in psutil.net_if_addrs().items():
+        
         if "Wi-Fi" in iface or "wlan" in iface:
             for snic in snics:
                 if snic.family == socket.AF_INET:
@@ -147,9 +149,28 @@ def get_wifi_ipv4_prefix():
                     return '.'.join(ip_parts[:3]) + '.'
     return None
 
+def is_local_lan(ip):
+    return (
+        #bypass VPN ip and disabled ips (start with 169.254.) to find your device
+        ip.startswith("your VPN Ip") or ip.startswith("169.254.")
+    )
+
+def get_wifi_ipv4_prefix_new():
+    for iface, snics in psutil.net_if_addrs().items():
+        if "Wi-Fi" in iface or "wlan" in iface or "Ethernet" in iface:
+            for snic in snics:
+                if snic.family == socket.AF_INET:
+                    ip = snic.address
+                    if is_local_lan(ip): 
+                        continue
+                    ip_parts = ip.split('.')
+                    return '.'.join(ip_parts[:3]) + '.'
+    return None
 
 async def main():
-    base_ip = get_wifi_ipv4_prefix()
+
+    base_ip = get_wifi_ipv4_prefix_new()
+
     if not base_ip:
         print("❌ Device has no connection to Wi-Fi")
         return
@@ -160,9 +181,5 @@ async def main():
     else:
         print("❌ POS not found")
 
-    
-
-
 if __name__ == "__main__":
     asyncio.run(main())
-

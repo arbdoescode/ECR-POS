@@ -97,8 +97,8 @@ if __name__ == "__main__":
     port = 4000
 
     # msg = build_echoo_ecr_message("X", ["Hello from ECR"])
-    msg = build_universal_ecr_message(["X//"], ["Hello from ECR"]) 
+    # msg = build_universal_ecr_message(["X//"], ["Hello from ECR"]) 
 
-    # msg = build_universal_ecr_message(["A//S","//F","//D","//R","//H","//T","//G","//M"], ["000001","2500:008:2","20211122123652","200111","PUPO0001","000003",":0:0:0:0","123456789123456789"])
+    msg = build_universal_ecr_message(["A//S","//F","//D","//R","//H","//T","//G","//M"], ["000001","2500:008:2","20211122123653","200111","PUPO0001","000003",":0:0:0:0","123456789123456789"])
 
     send_and_listen_to_pos(ip, port, msg)
